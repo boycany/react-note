@@ -3,41 +3,99 @@ import styles from "./PostsList.module.css";
 import Modal from "./Modal";
 import Post from "./Post";
 import NewPost from "./NewPost";
+import PropTypes from "prop-types";
 import { useState } from "react";
+import { useEffect } from "react";
 
-function PostsList() {
-    const [enteredBody, setEnteredBody] = useState("");
-    const [enteredAuthor, setEnteredAuthor] = useState("");
+function PostsList({ isPosting, onStopPosting }) {
+    const [posts, setPosts] = useState([]);
+    const [update, setUpdate] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-    function bodyChangeHandler(event) {
-        setEnteredBody(event.target.value);
+    useEffect(() => {
+        async function fetchPosts() {
+            setIsLoading(true);
+            const response = await fetch("http://localhost:8080/posts");
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || "Something went wrong!");
+            }
+            console.log("data :>> ", data);
+            setPosts(data.posts);
+            setUpdate(false);
+            setIsLoading(false);
+        }
+        fetchPosts();
+    }, [update]);
+
+    function addPostHandler(postData) {
+        async function createNewPost() {
+            const response = await fetch("http://localhost:8080/posts", {
+                method: "POST",
+                body: JSON.stringify(postData),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setUpdate(true);
+                console.log(data.message);
+            } else {
+                throw new Error(data.message || "Something went wrong!");
+            }
+        }
+        createNewPost();
     }
 
-    function authorChangeHandler(event) {
-        setEnteredAuthor(event.target.value);
+    function updateList() {
+        setUpdate(true);
     }
 
     return (
         <>
-            <Modal>
-                <NewPost
-                    onBodyChange={bodyChangeHandler}
-                    onAuthorChange={authorChangeHandler}
-                />
-            </Modal>
-            <ul className={styles.posts}>
-                <Post author={enteredAuthor} body={enteredBody} />
-                <Post author="Green" body="Angular2.... " />
-                <Post author="Duran" body="Dunk!!" />
-            </ul>
+            {isPosting && (
+                <Modal onClose={onStopPosting}>
+                    <NewPost
+                        onCancel={onStopPosting}
+                        onAddPost={addPostHandler}
+                    />
+                </Modal>
+            )}
+            {!isLoading && posts.length > 0 && (
+                <ul className={styles.posts}>
+                    {posts.map((post, i) => {
+                        return (
+                            <Post
+                                key={i}
+                                author={post.author}
+                                body={post.body}
+                                id={post.id}
+                                date={post.date}
+                                updateList={updateList}
+                            />
+                        );
+                    })}
+                </ul>
+            )}
+            {!isLoading && posts.length === 0 && (
+                <div style={{ textAlign: "center", color: "white" }}>
+                    <p>No posts yet.</p>
+                    {/* <p>Start adding some!</p> */}
+                </div>
+            )}
+            {isLoading && (
+                <div style={{ textAlign: "center", color: "white" }}>
+                    Loading...
+                </div>
+            )}
         </>
     );
 }
 
-{
-    /* PostsList.propTypes = {
-    children: PropTypes.node.isRequired,
-}; */
-}
+PostsList.propTypes = {
+    isPosting: PropTypes.bool.isRequired,
+    onStopPosting: PropTypes.func.isRequired,
+};
 
 export default PostsList;
