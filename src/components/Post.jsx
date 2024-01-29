@@ -1,9 +1,12 @@
 import PropTypes from "prop-types";
 import styles from "./Post.module.css";
+import { useNavigate } from "react-router-dom";
 
 function Post(props) {
+    const navigate = useNavigate();
+
     async function deleteHandler() {
-        alert("Are you sure you want to delete this post?");
+        if (!confirm("Are you sure you want to delete this post?")) return;
         const response = await fetch(
             `http://localhost:8080/posts/${props.id}`,
             {
@@ -15,7 +18,11 @@ function Post(props) {
         );
         const data = await response.json();
         console.log("data :>> ", data.message);
-        props.updateList();
+        navigate("/");
+    }
+
+    function editHandler() {
+        navigate(`/${props.id}`);
     }
 
     return (
@@ -24,7 +31,11 @@ function Post(props) {
             <p className={styles.text}>{props.body}</p>
             <p className={styles.date}>{props.date}</p>
             <div className={styles.footer}>
-                <button type="button" className={styles.edit}>
+                <button
+                    type="button"
+                    className={styles.edit}
+                    onClick={editHandler}
+                >
                     Edit
                 </button>
                 <button
@@ -44,7 +55,7 @@ Post.propTypes = {
     body: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
-    updateList: PropTypes.func.isRequired,
+    // updateList: PropTypes.func.isRequired,
 };
 
 export default Post;

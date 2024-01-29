@@ -1,12 +1,19 @@
 import styles from "./Modal.module.css";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
-function Modal(props) {
+function Modal({ children }) {
+    const navigate = useNavigate();
+
+    function closeHandler() {
+        navigate("/");
+    }
+
     return (
         <>
-            <div className={styles.backdrop} onClick={props.onClose} />
+            <div className={styles.backdrop} onClick={closeHandler} />
             <dialog open className={styles.modal}>
-                {props.children}
+                {children}
             </dialog>
         </>
     );
@@ -14,7 +21,6 @@ function Modal(props) {
 
 Modal.propTypes = {
     children: PropTypes.node.isRequired,
-    onClose: PropTypes.func,
 };
 
 export default Modal;
