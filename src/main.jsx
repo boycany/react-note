@@ -3,12 +3,12 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Posts, { loader as postsLoader } from "./routes/Posts.jsx";
 import "./index.css";
-import NewPost, { action as newPostAction } from "./routes/NewPost.jsx";
+import { action as newPostAction } from "./routes/NewPost.action.js";
+import NewPost from "./routes/NewPost.jsx";
 import RootLayout from "./routes/RootLayout.jsx";
-import PostDetails, {
-    loader as postDetailsLoader,
-    action as postDetailsAction,
-} from "./routes/PostDetails.jsx";
+import PostDetails from "./routes/PostDetails.jsx";
+import { loader as postDetailsLoader } from "./routes/PostDetails.loader.js";
+import { action as postDetailsAction } from "./routes/PostDetails.action.js";
 
 const router = createBrowserRouter([
     {

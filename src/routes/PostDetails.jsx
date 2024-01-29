@@ -1,15 +1,7 @@
-import {
-    useLoaderData,
-    Link,
-    useNavigate,
-    redirect,
-    Form,
-} from "react-router-dom";
+import { useLoaderData, Link, useNavigate, Form } from "react-router-dom";
 import Modal from "../components/Modal";
 import styles from "./PostDetails.module.css";
 import { useState } from "react";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
 
 function PostDetails() {
     const [post, setPost] = useState(useLoaderData());
@@ -84,39 +76,3 @@ function PostDetails() {
 }
 
 export default PostDetails;
-
-export async function loader({ params }) {
-    const response = await fetch(`http://localhost:8080/posts/${params.id}`);
-    const data = await response.json();
-    if (!response.ok) {
-        throw new Error(data.message || "Something went wrong!");
-    }
-    return data.post;
-}
-
-export async function action({ request, params }) {
-    console.log("params :>> ", params);
-    const id = params.id;
-    // data object with request property from react-router Form component
-    const formData = await request.formData();
-    console.log("request.formData :>> ", request.formData);
-
-    dayjs.extend(localizedFormat);
-    const postData = {
-        body: formData.get("body"),
-        author: formData.get("author"),
-        date: dayjs().format("lll"),
-    };
-    console.log("postData :>> ", postData);
-    // const postData = Object.fromEntries(formData);
-
-    await fetch("http://localhost:8080/posts/" + id, {
-        method: "PUT",
-        body: JSON.stringify(postData),
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-
-    return redirect("/");
-}
