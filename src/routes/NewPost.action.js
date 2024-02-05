@@ -14,8 +14,7 @@ export async function action({ request }) {
         date: dayjs().format("lll"),
     };
 
-    const url =
-        "https://note-db-615ab-default-rtdb.asia-southeast1.firebasedatabase.app/posts.json/";
+    const url = import.meta.env.VITE_API_URL;
 
     await fetch(url, {
         method: "POST",

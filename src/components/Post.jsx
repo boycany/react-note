@@ -7,10 +7,7 @@ function Post(props) {
 
     async function deleteHandler() {
         if (!confirm("Are you sure you want to delete this post?")) return;
-        const url =
-            "https://note-db-615ab-default-rtdb.asia-southeast1.firebasedatabase.app/posts";
-
-        // const url = `http://localhost:8080/posts/${props.id}`
+        const url = import.meta.env.VITE_API_POST_URL;
 
         await fetch(url + "/" + props.id + ".json", {
             method: "DELETE",

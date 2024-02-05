@@ -1,7 +1,6 @@
 export async function loader() {
-    const url =
-        "https://note-db-615ab-default-rtdb.asia-southeast1.firebasedatabase.app/posts.json";
-
+    // console.log("import.meta.env.API_URL :>> ", import.meta.env.VITE_API_URL);
+    const url = import.meta.env.VITE_API_URL;
     const response = await fetch(url);
     const data = await response.json();
     if (!response.ok) {
