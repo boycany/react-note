@@ -4,7 +4,26 @@ import PropTypes from "prop-types";
 import { useLoaderData } from "react-router-dom";
 
 function PostsList() {
-    const posts = useLoaderData();
+    const loadedPosts = useLoaderData();
+    // console.log("loaded posts :>> ", loadedPosts);
+
+    let posts = [];
+    if (loadedPosts) {
+        posts = Object.entries(loadedPosts).reduce((acc, [key, value]) => {
+            return [...acc, Object.assign(value, { id: key })];
+        }, []);
+    }
+
+    // const posts = [];
+
+    // if (loadedPosts) {
+    //     for (const [key, value] of Object.entries(loadedPosts)) {
+    //         // console.log(`${key}: ${value}`);
+    //         posts.push(Object.assign(value, { id: key }));
+    //     }
+    // }
+
+    // console.log("posts :>> ", posts);
 
     return (
         <>

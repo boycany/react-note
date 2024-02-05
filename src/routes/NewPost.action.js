@@ -5,7 +5,7 @@ import { redirect } from "react-router-dom";
 export async function action({ request }) {
     // data object with request property from react-router Form component
     const formData = await request.formData();
-    console.log("request.formData :>> ", request.formData);
+    // console.log("request.formData :>> ", request.formData);
 
     dayjs.extend(localizedFormat);
     const postData = {
@@ -13,10 +13,11 @@ export async function action({ request }) {
         author: formData.get("author"),
         date: dayjs().format("lll"),
     };
-    console.log("postData :>> ", postData);
-    // const postData = Object.fromEntries(formData);
 
-    await fetch("http://localhost:8080/posts", {
+    const url =
+        "https://note-db-615ab-default-rtdb.asia-southeast1.firebasedatabase.app/posts.json/";
+
+    await fetch(url, {
         method: "POST",
         body: JSON.stringify(postData),
         headers: {

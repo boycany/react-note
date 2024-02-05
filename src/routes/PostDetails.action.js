@@ -3,11 +3,11 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
 export async function action({ request, params }) {
-    console.log("params :>> ", params);
     const id = params.id;
     // data object with request property from react-router Form component
     const formData = await request.formData();
-    console.log("request.formData :>> ", request.formData);
+    // console.log("request :>> ", request);
+    // console.log("request.formData :>> ", request.formData);
 
     dayjs.extend(localizedFormat);
     const postData = {
@@ -15,10 +15,11 @@ export async function action({ request, params }) {
         author: formData.get("author"),
         date: dayjs().format("lll"),
     };
-    console.log("postData :>> ", postData);
-    // const postData = Object.fromEntries(formData);
 
-    await fetch("http://localhost:8080/posts/" + id, {
+    const url =
+        "https://note-db-615ab-default-rtdb.asia-southeast1.firebasedatabase.app/posts";
+
+    await fetch(url + "/" + id + ".json", {
         method: "PUT",
         body: JSON.stringify(postData),
         headers: {

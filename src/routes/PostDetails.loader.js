@@ -1,8 +1,11 @@
 export async function loader({ params }) {
-    const response = await fetch(`http://localhost:8080/posts/${params.id}`);
+    const url =
+        "https://note-db-615ab-default-rtdb.asia-southeast1.firebasedatabase.app/posts";
+
+    const response = await fetch(url + "/" + params.id + ".json");
     const data = await response.json();
     if (!response.ok) {
         throw new Error(data.message || "Something went wrong!");
     }
-    return data.post;
+    return data;
 }

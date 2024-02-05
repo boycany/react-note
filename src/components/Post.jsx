@@ -7,17 +7,17 @@ function Post(props) {
 
     async function deleteHandler() {
         if (!confirm("Are you sure you want to delete this post?")) return;
-        const response = await fetch(
-            `http://localhost:8080/posts/${props.id}`,
-            {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
-        const data = await response.json();
-        console.log("data :>> ", data.message);
+        const url =
+            "https://note-db-615ab-default-rtdb.asia-southeast1.firebasedatabase.app/posts";
+
+        // const url = `http://localhost:8080/posts/${props.id}`
+
+        await fetch(url + "/" + props.id + ".json", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
         navigate("/");
     }
 
