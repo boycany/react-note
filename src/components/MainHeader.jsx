@@ -12,8 +12,8 @@ function MainHeader() {
             </h1>
             <p>
                 <Link to="/create-post" className={styles.button}>
-                    <MdPostAdd size={18} />
-                    New Post
+                    <MdPostAdd size={24} />
+                    {/* New Post */}
                 </Link>
             </p>
         </header>
